@@ -22,3 +22,9 @@ def embedding(documents, embedding='bert'):
         word_features = word_vectorizer.transform(documents)
 
         return word_features
+    
+    if embedding == 'distilbert':
+        sbert_model = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-tas-b', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+
+        document_embeddings = sbert_model.encode(documents)
+        return document_embeddings

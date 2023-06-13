@@ -6,13 +6,55 @@ from core import pipeline
 sample_files = [
     "Chia Wei Jie_Resume.pdf",
     "Sam Zhuo Li_Resume.pdf",
-    "Fong Shi Hui_Resume.pdf",
+    "Mehul Soni_Resume.pdf",
 ]        
 
+# sample_job_descriptions = {
+#     "Business Management": """Microsoft Office Excel Word PowerPoint Access Video Editing Adobe Photoshop Software Excel Analytical Thinking Attention to Detail Communication Skills""",
+#     "Mobile Engineer": """Flutter Springboot Software Development Python Java Provider Frontend Backend Fullstack Developer MongoDB MySQL""",
+#     "Data Scientist": """Python SQL Machine Learning Deep Learning PyTorch Tensorflow Keras Scikit-learn Numpy Pandas"""
+# }
+
 sample_job_descriptions = {
-    "Business Management": """Microsoft Office Excel Word PowerPoint Access Video Editing Adobe Photoshop Software Excel Analytical Thinking Attention to Detail Communication Skills""",
-    "Mobile Engineer": """Flutter Springboot Software Development Python Java Provider Frontend Backend Fullstack Developer MongoDB MySQL""",
-    "Data Scientist": """Python SQL Machine Learning Deep Learning PyTorch Tensorflow Keras Scikit-learn Numpy Pandas"""
+    "Business Management": """Job Title: Accountant
+    Responsibilities:
+        Prepare financial statements and reports for management and external stakeholders.
+        Manage general ledger entries, accounts payable, and accounts receivable.
+        Conduct financial analysis and assist in budgeting and forecasting processes.
+        Ensure compliance with accounting principles and regulations.
+        Collaborate with auditors during financial audits and provide necessary documentation.
+    Required Skills:
+        Proficiency in financial reporting and accounting principles.
+        Experience with budgeting, auditing, and taxation processes.
+        Familiarity with accounting software and tools (e.g., Excel, QuickBooks).
+        Strong attention to detail and accuracy in financial data analysis.
+        Effective communication and interpersonal skills.""",
+    "Mobile Engineer": """Job Title: Mobile Engineer
+    Responsibilities:
+        Develop and maintain mobile applications using Flutter framework.
+        Collaborate with the backend team to integrate APIs and implement required functionalities.
+        Work on bug fixing and improving application performance.
+        Conduct code reviews and ensure code quality.
+        Stay updated with the latest trends and technologies in mobile app development.
+    Required Skills:
+        Proficiency in Flutter, Dart, and mobile app development.
+        Experience with Spring Boot and backend development is a plus.
+        Knowledge of software development principles and best practices.
+        Familiarity with frontend and backend technologies such as JavaScript, Java, and MongoDB.
+        Strong problem-solving and analytical thinking skills.""",
+    "Data Scientist": """    Job Title: Data Scientist
+    Responsibilities:
+        Analyze complex data sets to derive meaningful insights and patterns.
+        Build and deploy machine learning models for predictive analysis and data mining.
+        Collaborate with cross-functional teams to identify business requirements and formulate data-driven solutions.
+        Cleanse and preprocess data for analysis, ensuring data quality and integrity.
+        Communicate findings and present actionable insights to stakeholders.
+    Required Skills:
+        Proficiency in Python, SQL and data manipulation libraries (e.g., Pandas, NumPy).
+        Experience in machine learning techniques and frameworks (e.g., Scikit-learn, TensorFlow, PyTorch).
+        Strong statistical analysis skills and familiarity with statistical modeling techniques.
+        Knowledge of data visualization tools (e.g., Matplotlib, Seaborn) to present results effectively.
+        Excellent problem-solving and critical-thinking abilities."""
 }
 
 def inference(query, strings, embedding_type):
@@ -30,7 +72,7 @@ def resume_ranker():
     # Sample Resumes
     selected_sample_files = st.multiselect("Or select our sample resumes", sample_files)
 
-    embedding_type = st.selectbox("Embedding Type", ["bert", "minilm", "tfidf"])
+    embedding_type = st.selectbox("Embedding Type", ["bert", "minilm", "tfidf", "distilbert"])
 
     if st.button("Rank 'Em Resumes!"):
         if not query:

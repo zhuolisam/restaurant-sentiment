@@ -1,7 +1,5 @@
 # resume-ranker
 
-<hr>
-
 ## How to Use?
 
 Install all the dependencies with:
@@ -21,3 +19,4 @@ Or run it from with:
 ```bash
 python demo.py
 ```
+  
