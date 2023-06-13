@@ -2,7 +2,6 @@ from embedding import embedding
 from preprocessing import preprocess
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-import streamlit as st
 
 def pipeline(input_doc:str , ori_documents, embedding_type='bert'):
     documents = np.array([doc['content'] for doc in ori_documents])
@@ -22,14 +21,14 @@ def pipeline(input_doc:str , ori_documents, embedding_type='bert'):
 
     results = []
     print('Resume ranking:')
-    for idx in sorted_idx:
+    for rank, idx in enumerate(sorted_idx):
         single_result = {
-            'rank': idx,
+            'rank': rank,
             'name': ori_documents[idx]['name'],
             'similarity': pairwise[idx].item()
         }
         results.append(single_result)
-        print(f'Resume of candidite {idx}')
+        print(f'Resume of candidate {idx}')
         print(f'Cosine Similarity: {pairwise[idx]}\n')
     
     return results, result_pairwise
