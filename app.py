@@ -4,12 +4,6 @@ from core import pipeline
 
 def inference(query, files, embedding_type):
 
-    # pdfReader = PyPDF2.PdfReader(files[0])
-    # text = ''
-    # for page in pdfReader.pages:
-    #     text += page.extract_text()
-    # st.write(text)
-
     results, _ = pipeline(query, load_btyes_io(files), embedding_type=embedding_type)
     prob_per_documents = {result['name']: result['similarity'] for result in results}
     return prob_per_documents
@@ -32,7 +26,6 @@ def main():
 
     st.sidebar.header("Sample Job Descriptions")
     selected_job = st.sidebar.selectbox("Select a job description", list(sample_job_descriptions.keys()))
-    st.sidebar.markdown("```")
     st.sidebar.code(sample_job_descriptions[selected_job])
     st.title("👨🏼‍🎓Resume Ranker ")
     

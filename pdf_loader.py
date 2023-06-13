@@ -1,5 +1,7 @@
 import os
+import io
 import PyPDF2
+from sympy import content
 
 def load_single_document(file_path: str):
     # Loads a single document from file path
@@ -58,7 +60,33 @@ def load_btyes_io(files = None):
 
     return [
         {
-            'name': file_btye.name,
+            'name': file_btye.name or file_btye.filename,
             'content': load_io(file_btye)
         } for idx, file_btye in enumerate(files) if file_btye.name[-3:] in ['txt', 'pdf']
+    ]
+
+async def load_io_api(file_byte = None):
+    # Loads a single document from file path
+    if file_byte.filename[-3:] == 'txt':
+        content_byte = await file_byte.read()
+        return content_byte.decode("utf-8")
+
+    elif file_byte.filename[-3:] == 'pdf':
+        content_byte = await file_byte.read()
+        pdfReader = PyPDF2.PdfReader(io.BytesIO(content_byte))
+        text = ''
+        for page in pdfReader.pages:
+            text += page.extract_text()
+        return text
+
+    else:
+        raise Exception('Invalid file type')
+
+async def load_btyes_io_api(files = None):
+
+    return [
+        {
+            'name': file_btye.filename,
+            'content': await load_io_api(file_btye)
+        } for idx, file_btye in enumerate(files) if file_btye.filename[-3:] in ['txt', 'pdf']
     ]
