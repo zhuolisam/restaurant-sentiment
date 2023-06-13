@@ -7,9 +7,7 @@ import streamlit as st
 def pipeline(input_doc:str , ori_documents, embedding_type='bert'):
     documents = np.array([doc['content'] for doc in ori_documents])
     documents = np.insert(documents, 0, input_doc)
-    # st.write(documents)
     preprocessed_documents = preprocess(documents)
-    # st.write(preprocessed_documents)
     print("Encoding with BERT...")
     documents_vectors = embedding(preprocessed_documents, embedding=embedding_type)
     print("Encoding finished")
