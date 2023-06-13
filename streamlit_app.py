@@ -2,6 +2,7 @@ import streamlit as st
 from pdf_loader import load_btyes_io, load_documents
 import base64
 from core import pipeline
+import streamlit.components.v1 as components
 
 sample_files = [
     "business.pdf",
@@ -31,6 +32,7 @@ def resume_ranker():
     selected_sample_files = st.multiselect("Or select our sample resumes", sample_files)
 
     embedding_type = st.selectbox("Embedding Type", ["bert", "minilm", "tfidf"])
+
     if st.button("Rank 'Em Resumes!"):
         if not query:
             st.warning("Please enter a job description.")
@@ -67,7 +69,16 @@ def resume_viewer():
     selected_file = st.selectbox('Select a resume', sample_files)
     with open(f'documents/{selected_file}',"rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf"></iframe>'
+    # pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf" sandbox="allow-scripts allow-same-origin"></iframe>'
+    # pdf_display = f'<div><object data="documents/{selected_file}" width="800" height="800" type="application/pdf" ></object></div>'
+#     components.html(
+#         """
+#         <div><object data="documents/{selected_file}" width="800" height="800" type="application/pdf" ></object></div>
+#         """,
+#     height=600,
+#     width=600
+# )
+    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">' 
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 page_names_to_funcs = {
