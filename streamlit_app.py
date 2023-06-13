@@ -2,18 +2,17 @@ import streamlit as st
 from pdf_loader import load_btyes_io, load_documents
 import base64
 from core import pipeline
-import streamlit.components.v1 as components
 
 sample_files = [
-    "business.pdf",
-    "data_science.pdf",
+    "Chia Wei Jie_Resume.pdf",
+    "Sam Zhuo Li_Resume.pdf",
+    "Fong Shi Hui_Resume.pdf",
 ]        
 
 sample_job_descriptions = {
-    "Software Engineer": """We are looking for a software engineer with experience in Python and web development. The ideal candidate should have a strong background in building scalable and robust applications. Knowledge of frameworks such as Flask and Django is a plus. Experience with front-end technologies like HTML, CSS, and JavaScript is desirable. The candidate should also have a good understanding of databases and SQL. Strong problem-solving and communication skills are required for this role.
-    """,
-    "Data Scientist": """We are seeking a data scientist with expertise in machine learning and statistical analysis. The candidate should have a solid understanding of data manipulation, feature engineering, and model development. Proficiency in Python and popular data science libraries such as NumPy, Pandas, and Scikit-learn is required. Experience with deep learning frameworks like TensorFlow or PyTorch is a plus. Strong analytical and problem-solving skills are essential for this position.
-    """
+    "Business Management": """Microsoft Office Excel Word PowerPoint Access Video Editing Adobe Photoshop Software Excel Analytical Thinking Attention to Detail Communication Skills""",
+    "Mobile Engineer": """Flutter Springboot Software Development Python Java Provider Frontend Backend Fullstack Developer MongoDB MySQL""",
+    "Data Scientist": """Python SQL Machine Learning Deep Learning PyTorch Tensorflow Keras Scikit-learn Numpy Pandas"""
 }
 
 def inference(query, strings, embedding_type):
@@ -52,6 +51,10 @@ def resume_ranker():
             st.subheader("Results")
             for result in results:
                 similarity = result["similarity"]
+                if similarity > 1:
+                    similarity = 1.0
+                elif similarity < 0:
+                    similarity = 0.0
                 name = result["name"]
                 rank = result["rank"]
                 # make similiarty round to 2 decimal place
@@ -65,21 +68,18 @@ def resume_ranker():
 
 def resume_viewer():
     st.title("👨🏼‍🎓Resume Viewer")
-
     selected_file = st.selectbox('Select a resume', sample_files)
-    with open(f'documents/{selected_file}',"rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    # pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf" sandbox="allow-scripts allow-same-origin"></iframe>'
-    # pdf_display = f'<div><object data="documents/{selected_file}" width="800" height="800" type="application/pdf" ></object></div>'
-#     components.html(
-#         """
-#         <div><object data="documents/{selected_file}" width="800" height="800" type="application/pdf" ></object></div>
-#         """,
-#     height=600,
-#     width=600
-# )
-    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">' 
-    st.markdown(pdf_display, unsafe_allow_html=True)
+
+    def show_pdf(selected_file):
+        with open(f'documents/{selected_file}',"rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+
+        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">' 
+        # pdf_url = 'https://drive.google.com/file/d/13fbfMOl3Pjgo5kaNeDZ7nP1cZQvIA6x3/view'
+        # pdf_display = F'<iframe src="{pdf_url}" width="700" height="700" type="application/pdf"></iframe>'    # st.markdown(f'<a href="./documents/{selected_file}" >{selected_file}</a>', unsafe_allow_html=True)
+        st.markdown(pdf_display, unsafe_allow_html=True)
+    
+    show_pdf(selected_file)
 
 page_names_to_funcs = {
     "Resume Ranker": resume_ranker,
