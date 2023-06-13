@@ -13,7 +13,7 @@ Install all the dependencies with:
 Run the Streamlilt with:
 
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 Or run it from with:
