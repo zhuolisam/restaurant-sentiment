@@ -72,7 +72,7 @@ def resume_ranker():
     # Sample Resumes
     selected_sample_files = st.multiselect("Or select our sample resumes", sample_files)
 
-    embedding_type = st.selectbox("Embedding Type", ["bert", "minilm", "tfidf", "distilbert"])
+    embedding_type = st.selectbox("Embedding Type", ["sbert", "minilm", "tfidf", "distilbert"])
 
     if st.button("Rank 'Em Resumes!"):
         if not query:

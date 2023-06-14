@@ -3,7 +3,7 @@ from preprocessing import preprocess
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-def pipeline(input_doc:str , ori_documents, embedding_type='bert'):
+def pipeline(input_doc:str , ori_documents, embedding_type='sbert'):
     documents = np.array([doc['content'] for doc in ori_documents])
     documents = np.insert(documents, 0, input_doc)
     preprocessed_documents = preprocess(documents)
