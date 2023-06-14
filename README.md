@@ -1,7 +1,5 @@
 # resume-ranker
 
-<hr>
-
 ## How to Use?
 
 Install all the dependencies with:
@@ -13,7 +11,7 @@ Install all the dependencies with:
 Run the Streamlilt with:
 
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 Or run it from with:
@@ -21,3 +19,4 @@ Or run it from with:
 ```bash
 python demo.py
 ```
+  
