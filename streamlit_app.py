@@ -4,16 +4,10 @@ import base64
 from core import pipeline
 
 sample_files = [
+    "Mehul Soni_Resume.pdf",
     "Chia Wei Jie_Resume.pdf",
     "Sam Zhuo Li_Resume.pdf",
-    "Mehul Soni_Resume.pdf",
 ]        
-
-# sample_job_descriptions = {
-#     "Business Management": """Microsoft Office Excel Word PowerPoint Access Video Editing Adobe Photoshop Software Excel Analytical Thinking Attention to Detail Communication Skills""",
-#     "Mobile Engineer": """Flutter Springboot Software Development Python Java Provider Frontend Backend Fullstack Developer MongoDB MySQL""",
-#     "Data Scientist": """Python SQL Machine Learning Deep Learning PyTorch Tensorflow Keras Scikit-learn Numpy Pandas"""
-# }
 
 sample_job_descriptions = {
     "Business Management": """Job Title: Accountant
@@ -117,8 +111,6 @@ def resume_viewer():
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')
 
         pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">' 
-        # pdf_url = 'https://drive.google.com/file/d/13fbfMOl3Pjgo5kaNeDZ7nP1cZQvIA6x3/view'
-        # pdf_display = F'<iframe src="{pdf_url}" width="700" height="700" type="application/pdf"></iframe>'    # st.markdown(f'<a href="./documents/{selected_file}" >{selected_file}</a>', unsafe_allow_html=True)
         st.markdown(pdf_display, unsafe_allow_html=True)
     
     show_pdf(selected_file)
