@@ -23,7 +23,7 @@ def pipeline(input_doc:str , ori_documents, embedding_type='sbert'):
         single_result = {
             'rank': rank,
             'name': ori_documents[idx]['name'],
-            'similarity': pairwise[idx].item()
+            'similarity': float(pairwise[idx].item())
         }
         results.append(single_result)
         print(f'Resume of candidate {idx}')

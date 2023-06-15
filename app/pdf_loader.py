@@ -1,4 +1,5 @@
 import os
+import io
 import PyPDF2
 
 def load_single_document(file_path: str):
@@ -28,7 +29,13 @@ def load_documents(file_paths: list[str] = None, source_dir: str = None):
     if file_paths:
         all_files = file_paths
     elif source_dir:
-        all_files = [os.path.abspath(os.path.join(source_dir, file)) for file in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, file))]
+        script_dir = os.path.dirname(__file__)
+        source_dir = os.path.join(script_dir, source_dir)
+        all_files = [
+            os.path.abspath(os.path.join(source_dir, file))
+            for file in os.listdir(source_dir)
+            if os.path.isfile(os.path.join(source_dir, file))
+        ]
     else:
         raise Exception('No file paths or source directory provided')
 
@@ -58,7 +65,33 @@ def load_btyes_io(files = None):
 
     return [
         {
-            'name': file_btye.name,
+            'name': file_btye.name or file_btye.filename,
             'content': load_io(file_btye)
         } for idx, file_btye in enumerate(files) if file_btye.name[-3:] in ['txt', 'pdf']
+    ]
+
+async def load_io_api(file_byte = None):
+    # Loads a single document from file path
+    if file_byte.filename[-3:] == 'txt':
+        content_byte = await file_byte.read()
+        return content_byte.decode("utf-8")
+
+    elif file_byte.filename[-3:] == 'pdf':
+        content_byte = await file_byte.read()
+        pdfReader = PyPDF2.PdfReader(io.BytesIO(content_byte))
+        text = ''
+        for page in pdfReader.pages:
+            text += page.extract_text()
+        return text
+
+    else:
+        raise Exception('Invalid file type')
+
+async def load_btyes_io_api(files = None):
+
+    return [
+        {
+            'name': file_btye.filename,
+            'content': await load_io_api(file_btye)
+        } for idx, file_btye in enumerate(files) if file_btye.filename[-3:] in ['txt', 'pdf']
     ]

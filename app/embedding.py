@@ -10,9 +10,9 @@ def embedding(documents, embedding='sbert'):
         return document_embeddings
     
     if embedding == 'minilm':
-        sbert_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+        minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'embedding'))
 
-        document_embeddings = sbert_model.encode(documents)
+        document_embeddings = minilm.encode(documents)
         return document_embeddings
 
     if embedding == 'tfidf':
@@ -23,8 +23,8 @@ def embedding(documents, embedding='sbert'):
 
         return word_features
     
-    if embedding == 'distilbert':
-        sbert_model = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-tas-b', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+    # if embedding == 'distilbert':
+    #     distilbert = SentenceTransformer('sentence-transformers/msmarco-distilbert-base-tas-b', cache_folder=os.path.join(os.getcwd(), 'embedding'))
 
-        document_embeddings = sbert_model.encode(documents)
-        return document_embeddings
+    #     document_embeddings = distilbert.encode(documents)
+    #     return document_embeddings
