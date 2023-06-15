@@ -1,7 +1,6 @@
 import os
 import io
 import PyPDF2
-from sympy import content
 
 def load_single_document(file_path: str):
     # Loads a single document from file path
@@ -30,7 +29,13 @@ def load_documents(file_paths: list[str] = None, source_dir: str = None):
     if file_paths:
         all_files = file_paths
     elif source_dir:
-        all_files = [os.path.abspath(os.path.join(source_dir, file)) for file in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, file))]
+        script_dir = os.path.dirname(__file__)
+        source_dir = os.path.join(script_dir, source_dir)
+        all_files = [
+            os.path.abspath(os.path.join(source_dir, file))
+            for file in os.listdir(source_dir)
+            if os.path.isfile(os.path.join(source_dir, file))
+        ]
     else:
         raise Exception('No file paths or source directory provided')
 
