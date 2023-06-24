@@ -7,12 +7,6 @@ import inflect
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 
-# download_path = os.path.join(os.getcwd(), 'nltk_packages')
-# nltk.data.path.append(download_path)
-# nltk.download('wordnet', download_dir=download_path)
-# nltk.download('stopwords', download_dir=download_path)
-# nltk.download('punkt', download_dir=download_path)
-
 def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
     new_words = []

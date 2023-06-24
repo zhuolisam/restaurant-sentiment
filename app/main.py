@@ -19,13 +19,15 @@ def load_model():
     nltk.download('wordnet', download_dir=download_path)
     nltk.download('stopwords', download_dir=download_path)
     nltk.download('punkt', download_dir=download_path)
-    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
+    minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
     print('Model is ready')
 
 @app.get("/health-check")
 async def root():
     """Heatlh Check"""
-    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
+    minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
     return {"message": "Model is ready"}
 
 
