@@ -1,6 +1,10 @@
 import streamlit as st
-from pdf_loader import load_btyes_io, load_documents
 import base64
+import nltk
+import os 
+from sentence_transformers import SentenceTransformer
+
+from pdf_loader import load_btyes_io, load_documents
 from core import pipeline
 
 sample_files = [
@@ -51,6 +55,14 @@ sample_job_descriptions = {
         Excellent problem-solving and critical-thinking abilities."""
 }
 
+# Load the models and ntlk packages
+download_path = os.path.join(os.getcwd(), 'nltk_packages')
+nltk.data.path.append(download_path)
+nltk.download('wordnet', download_dir=download_path)
+nltk.download('stopwords', download_dir=download_path)
+nltk.download('punkt', download_dir=download_path)
+sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
+
 def inference(query, strings, embedding_type):
     results, _ = pipeline(query, strings , embedding_type=embedding_type)
     return results
@@ -66,7 +78,7 @@ def resume_ranker():
     # Sample Resumes
     selected_sample_files = st.multiselect("Or select our sample resumes", sample_files)
 
-    embedding_type = st.selectbox("Embedding Type", ["sbert", "minilm", "tfidf", "distilbert"])
+    embedding_type = st.selectbox("Embedding Type", ["sbert", "minilm", "tfidf"])
 
     if st.button("Rank 'Em Resumes!"):
         if not query:
@@ -76,10 +88,10 @@ def resume_ranker():
         else:
             with st.spinner("Processing..."):
                 if selected_sample_files and uploaded_files:
-                    uploaded_files = load_btyes_io(uploaded_files) + load_documents([f"./documents/{file}" for file in selected_sample_files])
+                    uploaded_files = load_btyes_io(uploaded_files) + load_documents([f"documents/{file}" for file in selected_sample_files])
                     results = inference(query, uploaded_files, embedding_type)
                 elif selected_sample_files:
-                    uploaded_files = load_documents([f"./documents/{file}" for file in selected_sample_files])
+                    uploaded_files = load_documents([f"documents/{file}" for file in selected_sample_files])
                     results = inference(query, uploaded_files, embedding_type)
                 else:
                     uploaded_files = load_btyes_io(uploaded_files)

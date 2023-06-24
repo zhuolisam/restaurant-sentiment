@@ -4,13 +4,13 @@ import os
 
 def embedding(documents, embedding='sbert'):
     if embedding == 'sbert':
-        sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+        sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
 
         document_embeddings = sbert_model.encode(documents)
         return document_embeddings
     
     if embedding == 'minilm':
-        minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'embedding'))
+        minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
 
         document_embeddings = minilm.encode(documents)
         return document_embeddings
