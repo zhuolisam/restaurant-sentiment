@@ -5,7 +5,7 @@ from pathlib import Path
 
 def load_single_document(file_path: str):
     # Loads a single document from file path
-    file_path = Path(f"app/documents/{file_path}")
+    file_path = Path(f"documents/{file_path}")
     if file_path[-4:] == '.txt':
         with open(file_path, 'r') as f:
             return f.read()
