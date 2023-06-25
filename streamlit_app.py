@@ -55,13 +55,17 @@ sample_job_descriptions = {
         Excellent problem-solving and critical-thinking abilities."""
 }
 
+if not os.path.exists('nltk_packages'):
 # Load the models and ntlk packages
-download_path = os.path.join(os.getcwd(), 'nltk_packages')
-nltk.data.path.append(download_path)
-nltk.download('wordnet', download_dir=download_path)
-nltk.download('stopwords', download_dir=download_path)
-nltk.download('punkt', download_dir=download_path)
-sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
+    download_path = os.path.join(os.getcwd(), 'nltk_packages')
+    nltk.data.path.append(download_path)
+    nltk.download('wordnet', download_dir=download_path)
+    nltk.download('stopwords', download_dir=download_path)
+    nltk.download('punkt', download_dir=download_path)
+
+if not os.path.exists('models'):
+    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
+    minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
 
 def inference(query, strings, embedding_type):
     results, _ = pipeline(query, strings , embedding_type=embedding_type)
