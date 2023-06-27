@@ -1,43 +1,18 @@
 from fastapi import FastAPI, File, UploadFile, Request
+from fastapi.responses import JSONResponse
 from http import HTTPStatus
-from sentence_transformers import SentenceTransformer
 from functools import wraps
 from datetime import datetime
 from typing import Dict
-import nltk
-import os
+import uvicorn
+from mangum import Mangum
 
 from core import pipeline
 from pdf_loader import load_btyes_io_api
+from preprocessing import load_nltk
+from embedding import load_model
+
 app = FastAPI()
-
-@app.on_event("startup")
-def load_model():
-    """Load the model and nltk packages"""
-    download_path = os.path.join(os.getcwd(), 'nltk_packages')
-    nltk.data.path.append(download_path)
-    nltk.download('wordnet', download_dir=download_path)
-    nltk.download('stopwords', download_dir=download_path)
-    nltk.download('punkt', download_dir=download_path)
-    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
-    minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
-    print('Model is ready')
-
-@app.get("/health-check")
-async def root():
-    """Heatlh Check"""
-    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
-    minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
-    return {"message": "Model is ready"}
-
-
-@app.post("/resume")
-async def root(job_description: str, files: list[UploadFile] = File(...)) -> Dict:
-    """Endpoint for resume parsing"""
-    
-    fileArray = await load_btyes_io_api(files)
-    results, result_pairwise = pipeline(job_description, fileArray)
-    return {"results": results}
 
 def construct_response(f):
     """Construct a JSON response for an endpoint."""
@@ -54,10 +29,44 @@ def construct_response(f):
         }
         if "data" in results:
             response["data"] = results["data"]
-        return response
+        return JSONResponse(response)
 
     return wrap
 
+@app.on_event("startup")
+def startup_load():
+    """Load the model and nltk packages"""
+    load_nltk()
+    load_model()
+    print('Embedding and nltk packages are ready')
+    return
+
+@app.get("/health-check")
+@construct_response
+def root(request: Request):
+    """Heatlh Check"""
+    load_nltk()
+    load_model()
+    response = {
+        "message": "Embedding and nltk packages are ready",
+        "status-code": HTTPStatus.OK,
+        "data": {},
+    }   
+    return response
+
+@app.post("/resume")
+@construct_response
+def resume(request: Request, job_description: str, files: list[UploadFile] = File(...)) -> Dict:
+    """Endpoint for resume parsing"""
+    
+    fileArray = load_btyes_io_api(files)
+    results, result_pairwise = pipeline(job_description, fileArray)
+    response = {
+        "message": HTTPStatus.OK.phrase,
+        "status-code": HTTPStatus.OK,
+        "data": results,
+    }   
+    return response
 
 @app.get("/")
 @construct_response
@@ -69,3 +78,8 @@ def _index(request: Request) -> Dict:
         "data": {},
     }
     return response
+
+handler = Mangum(app)
+
+if __name__ == "__main__":
+   uvicorn.run(app, host="0.0.0.0", port=8000)
