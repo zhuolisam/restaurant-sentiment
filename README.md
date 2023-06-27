@@ -2,7 +2,7 @@
 
 ## API Endpoint
 
-The endpoint is built with the blazingly fast Python web framework FastAPI, and is hosted on AWS serverless Lambda function, via Elastic Container Registry (ECR) and Lambda's function URL. You can find the endpoint [here](https://rtqf5s4ihfoirzcpugpvcddoqy0obhrj.lambda-url.us-east-1.on.aws/).
+The endpoint is built with the blazingly fast Python web framework FastAPI, and is hosted on AWS serverless Lambda function, via Elastic Container Registry (ECR) and Lambda's function URL. You can find the endpoint [here](https://rtqf5s4ihfoirzcpugpvcddoqy0obhrj.lambda-url.us-east-1.on.aws/docs).
 
 If you are interested, you can find the steps to deploy the FastAPI app in this [article](https://medium.com/analytics-vidhya/python-fastapi-and-aws-lambda-container-3e524c586f01).
 
