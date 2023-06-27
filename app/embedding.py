@@ -1,16 +1,18 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sentence_transformers import SentenceTransformer
 import os
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+cache_folder = os.path.join(os.getcwd(), "models")
+from sentence_transformers import SentenceTransformer
 
 def embedding(documents, embedding='sbert'):
     if embedding == 'sbert':
-        sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=os.path.join(os.getcwd(), 'models'))
+        sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=cache_folder)
 
         document_embeddings = sbert_model.encode(documents)
         return document_embeddings
     
     if embedding == 'minilm':
-        minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=os.path.join(os.getcwd(), 'models'))
+        minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=cache_folder)
 
         document_embeddings = minilm.encode(documents)
         return document_embeddings
@@ -28,3 +30,10 @@ def embedding(documents, embedding='sbert'):
 
     #     document_embeddings = distilbert.encode(documents)
     #     return document_embeddings
+
+def load_model():
+    """Load the model and nltk packages"""
+    sbert_model = SentenceTransformer('bert-base-nli-mean-tokens', cache_folder=cache_folder)
+    minilm = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2', cache_folder=cache_folder)
+    print('Embedding models are ready')
+    return

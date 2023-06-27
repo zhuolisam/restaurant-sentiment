@@ -1,11 +1,13 @@
-
-import re
 import os
+import re
 import unicodedata
 import nltk
 import inflect
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
+
+download_path = os.path.join(os.getcwd(), 'nltk_packages')
+nltk.data.path.append(download_path)
 
 def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
@@ -98,3 +100,10 @@ def preprocess(documents):
         preprocessed_documents.append(preprocessed)
 
     return preprocessed_documents
+
+def load_nltk():
+    nltk.download('wordnet', download_dir=download_path)
+    nltk.download('stopwords', download_dir=download_path)
+    nltk.download('punkt', download_dir=download_path)
+    print('nltk packages are ready')
+    return
